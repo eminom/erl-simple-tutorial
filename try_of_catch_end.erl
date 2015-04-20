@@ -1,5 +1,5 @@
 
--module(k5).
+-module(try_of_catch_end).
 -export([test/1]).
 
 test(F)->
