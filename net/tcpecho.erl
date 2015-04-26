@@ -1,8 +1,6 @@
 
 -module(tcpecho).
-
 -behavior(gen_server).
-
 -include_lib("eunit/include/eunit.hrl").
 
 -export([start_link/1,
@@ -18,19 +16,17 @@
     terminate/2,
     code_change/3]).
 
-%% Set the record for state. 
-%% request count default to 0
 -record(state, {port, lsock, request_count=0}).
 
 -define(SERVER, ?MODULE).
 -define(DEFAULT_PORT, 3000).
 
 start_link(Port)->
-    io:format("OK, starting tco-echo server on port ~p...~n",[Port]),
+    %io:format("OK, starting tco-echo server on port ~p...~n",[Port]),
     gen_server:start_link({local, ?SERVER}, ?MODULE, [Port], []).
 
 start_link()->
-    io:format("default port set~n"),
+    %io:format("default port set~n"),
     start_link(?DEFAULT_PORT).
 
 get_count()->
@@ -45,7 +41,7 @@ stop()->
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 init([Port])->
-    io:format("init/0~n"),
+    %io:format("init/0~n"),
     {ok, LSock} = gen_tcp:listen(Port, [{active, true}]),
     {ok, #state{port = Port, lsock = LSock}, 0}.
 
@@ -53,14 +49,19 @@ handle_call(get_count, _From, State)->
     {reply, {ok, State#state.request_count}, State}.
 
 handle_info({tcp, Socket, RawData}, State)->
-    io:format("incoming message~n"),
+    %io:format("incoming message~n"),
     do_echo(Socket, RawData),
     RequestCount = State#state.request_count,
     {noreply, State#state{request_count=RequestCount+1}};
 handle_info(timeout, #state{lsock=LSock} = State)->
     {ok, _Sock} = gen_tcp:accept(LSock),
-    io:format("New connection is established~n"),
-    {noreply, State}.
+    %io:format("New connection is established~n"),
+    {noreply, State};
+		%{ok, State, 0};
+
+handle_info({tcp_closed, _}, State)->
+	% Got to handle client's crash.
+	{noreply, State}.
 
 handle_cast(stop, State)->
     {stop, normal,  State}.
@@ -71,20 +72,29 @@ terminate(_Reason, _State)->
 code_change(_OldVsn, State, _Extra)->
     {ok, State}.
 
+
+%% RawData is a list.
 do_echo(Socket, RawData)->
-    try 
-        io:format("Sending back:~p ~n", [RawData]),
-        gen_tcp:send(Socket, io_lib:fwrite("~p~n", [RawData]))
+    try
+			  % C-style local
+				% Rv is a list for sure.
+				RetValue = rev_t(RawData),
+        %io:format("Sending back:~w ~n", Rv),
+        gen_tcp:send(Socket, io_lib:fwrite("~s~n", [RetValue]))
     catch 
         _Class:Err->
-        gen_tcp:send(Socket, io_lib:fwrite("~p~n", [Err]))
+          gen_tcp:send(Socket, io_lib:fwrite("~p~n", [Err]))
     end.
+
+
+%% Internal functions.
+%% Get the reverse list and kill 10
+rev_t([])->[];
+rev_t([10 | Rest])->
+	rev_t(Rest);
+rev_t([Head | Rest])->
+	rev_t(Rest) ++ [Head].
 
 test()->
     {ok, _} = start_link().
-
-%% TODO    
-
-
-
 
