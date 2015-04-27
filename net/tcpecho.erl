@@ -7,7 +7,7 @@
     start_link/0,
     get_count/0,
     stop/0,
-    test/0]).
+    start_test/0]).
 
 -export([init/1, 
     handle_call/3,
@@ -95,6 +95,9 @@ rev_t([10 | Rest])->
 rev_t([Head | Rest])->
 	rev_t(Rest) ++ [Head].
 
-test()->
+
+%% The name must be placed this way.
+%% And the unittest will come to place.
+start_test()->
     {ok, _} = start_link().
 
