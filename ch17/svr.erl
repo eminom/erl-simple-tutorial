@@ -1,5 +1,5 @@
 
-%% OK. More test on tcp_gen
+%% OK. More test on gen_tcp
 -module(svr).
 -export([start/0]).
 
