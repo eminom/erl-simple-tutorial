@@ -8,5 +8,5 @@
 
 test()->
 	protobuffs_compile:scan_file("k6.proto"),
-	Bin = iolist_to_binary(k3_pb:encode({phone, "138",13, home})),
+	Bin = iolist_to_binary(k3_pb:encode({phone, "138",13})),
 	k3_pb:decode_phone(Bin).

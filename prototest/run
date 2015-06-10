@@ -1,0 +1,10 @@
+#!/usr/bin/perl -w
+use 5.014;
+exit if $#ARGV < 0;
+my $name = "k$ARGV[0]";
+system "protoc --proto_path=. -o $name.pb $name.proto";
+die if $?;
+system "erlc $name.erl";
+die if $?;
+system "erl -noshell -s $name test -s init stop";
+
