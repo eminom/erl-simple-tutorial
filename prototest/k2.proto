@@ -1,0 +1,5 @@
+
+message Phone {
+	required string no = 1;
+	required int32 value = 2;
+}

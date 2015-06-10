@@ -1,0 +1,10 @@
+
+message Phone {
+	enum PhoneType{
+		CELL = 0;
+		HOME = 1;
+	}
+	required string no = 1;
+	required int32 value = 2;
+	required PhoneType type = 3;
+}

@@ -1,0 +1,4 @@
+
+message Phone {
+	required string no = 1;
+}
