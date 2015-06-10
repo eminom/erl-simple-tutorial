@@ -1,3 +1,5 @@
 #!/usr/bin/perl -w
 
+system "erlc *.erl";
+die if $?;
 system "erl -noshell -s app start -s init stop"

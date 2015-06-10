@@ -9,5 +9,5 @@
 
 test()->
 	protobuffs_compile:scan_file("k5.proto"),
-	Bin = iolist_to_binary(k3_pb:encode({phone, "138",13})),
-	k3_pb:decode_phone(Bin).
+	Bin = iolist_to_binary(k5_pb:encode({phone, "138",13, 'CELL'})),
+	k5_pb:decode_phone(Bin).

@@ -3,6 +3,7 @@ message Phone {
 	enum PhoneType{
 		CELL = 0;
 		HOME = 1;
+		transport = 2;
 	}
 	required string no = 1;
 	required int32 value = 2;
