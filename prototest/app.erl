@@ -6,6 +6,7 @@
 
 -module(app).
 -export([start/0]).
+-include_lib("eunit/include/eunit.hrl").
 
 start()->
 	run(1).
@@ -19,3 +20,6 @@ run(N)->
 		_ ->
 			ok
 	end.
+
+start_test()->
+	start().
