@@ -1,0 +1,23 @@
+#!/usr/bin/env escript
+% But it can not locate protobuffs_compile.
+% code:add_patha is not ok for this.
+
+main(_)->
+	{ok, [[Home]|_]} = init:get_argument(home),
+	HomeBin = Home ++ "/test/el/erlang_protobuffs/ebin",
+	% io:format("HomeBin = <~p>~n", [HomeBin]),
+	code:add_patha(HomeBin),
+	io:format("Added done.~n"),
+	run(1).
+	
+run(N) when N < 7 ->
+	A = list_to_atom([$k, N + $1 - 1]),
+	io:format("~p~n", [A]),
+	A:test(),
+	run(N+1);
+	
+run(_) ->
+	ok.
+	
+	
+
